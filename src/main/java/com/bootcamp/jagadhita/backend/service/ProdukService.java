@@ -30,10 +30,12 @@ public class ProdukService {
         return dao.create(produk);
     }
 
+    @Transactional
     public void update(ProdukDto.Update produk) {
         dao.update(produk);
     }
 
+    @Transactional
     public void delete(Integer id) {
         dao.delete(id);
     }

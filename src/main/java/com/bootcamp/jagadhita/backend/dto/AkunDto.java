@@ -3,38 +3,37 @@ package com.bootcamp.jagadhita.backend.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-public class ProdukDto {
+public class AkunDto {
 
     @Data
     @NoArgsConstructor
     public static class Create {
 
-        @Size(min = 4)
-        @NotEmpty
-        @NotNull
-        String nama;
-
-        @Size(min = 7)
-        @NotEmpty
-        @NotNull
-        String jenis;
 
         @NotEmpty
         @NotNull
-        String berat;
+        String username;
 
-        @Min(4)
+        @NotEmpty
         @NotNull
-        Double harga;
+        String nama_lengkap;
 
-        @Min(1)
+        @NotEmpty
         @NotNull
-        Integer produsen_id;
+        String alamat;
+
+        @NotNull
+        Integer umur;
+
+        @NotEmpty
+        @NotNull
+        String universitas;
+
+        @NotNull
+        Integer app_users_id;
 
     }
 
@@ -42,30 +41,30 @@ public class ProdukDto {
     @NoArgsConstructor
     public static class Update {
 
-        @Min(1)
         @NotNull
         Integer id;
 
-        @Size(min = 4)
         @NotEmpty
         @NotNull
-        String nama;
-
-        @Size(min = 7)
-        @NotEmpty
-        @NotNull
-        String jenis;
+        String username;
 
         @NotEmpty
         @NotNull
-        String berat;
+        String nama_lengkap;
 
-        @Min(4)
+        @NotEmpty
         @NotNull
-        Double harga;
+        String alamat;
 
-        @Min(1)
         @NotNull
-        Integer produsen_id;
+        Integer umur;
+
+        @NotEmpty
+        @NotNull
+        String universitas;
+
+        @NotNull
+        Integer app_users_id;
+
     }
 }

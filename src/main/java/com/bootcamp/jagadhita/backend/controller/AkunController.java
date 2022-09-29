@@ -1,8 +1,10 @@
 package com.bootcamp.jagadhita.backend.controller;
 
-import com.bootcamp.jagadhita.backend.dto.ProdukDto;
-import com.bootcamp.jagadhita.backend.entity.Produk;
-import com.bootcamp.jagadhita.backend.service.ProdukService;
+
+import com.bootcamp.jagadhita.backend.dto.AkunDto;
+import com.bootcamp.jagadhita.backend.entity.Akun;
+import com.bootcamp.jagadhita.backend.service.AkunService;
+import com.bootcamp.jagadhita.backend.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,32 +18,31 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/produk")
+@RequestMapping("/api/akun")
 @Slf4j
-
-public class ProdukController {
+public class AkunController {
 
     @Autowired
-    ProdukService service;
+    AkunService service;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findId(@PathVariable Integer id) {
         try {
-            Produk produk = service.findId(id);
-            return ResponseEntity.ok(produk);
+            Akun akun = service.findId(id);
+            return ResponseEntity.ok(akun);
         } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.badRequest().body("Data tidak ditemukan");
+            return ResponseEntity.badRequest().body("Data Tidak Ditemukan");
         }
     }
 
     @GetMapping("")
-    public List<Produk> findAll() {
+    public List<Akun> findAll() {
         return service.findAll();
     }
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create
-            (@RequestBody @Valid ProdukDto.Create produk,
+            (@RequestBody @Valid AkunDto.Create akun,
              BindingResult result) {
         Map<String, Object> output = new HashMap<>();
         if (result.hasErrors()) {
@@ -50,15 +51,15 @@ public class ProdukController {
             output.put("errors", result.getAllErrors());
             return ResponseEntity.badRequest().body(output);
         } else {
-            output.put("id", service.create(produk));
+            output.put("id", service.create(akun));
             output.put("status", "Create Data Berhasil");
             return ResponseEntity.ok(output);
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping("/edit")
     public ResponseEntity<Map<String, Object>> update
-            (@RequestBody @Valid ProdukDto.Update produk, BindingResult result) {
+            (@RequestBody @Valid AkunDto.Update akun, BindingResult result) {
         Map<String, Object> output = new HashMap<>();
         if (result.hasErrors()) {
             output.put("status", "Update Data Gagal");
@@ -66,29 +67,14 @@ public class ProdukController {
             return ResponseEntity.badRequest().body(output);
         } else {
             try {
-                service.findId(produk.getId());
-                service.update(produk);
+                service.findId(akun.getId());
+                service.update(akun);
                 output.put("status", "Update Data Berhasil");
                 return ResponseEntity.ok().body(output);
             } catch (EmptyResultDataAccessException e) {
                 output.put("status", "Id Tidak Ditemukan");
                 return ResponseEntity.badRequest().body(output);
             }
-        }
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Map<String, Object>> delete
-            (@PathVariable Integer id) {
-        Map<String, Object> output = new HashMap<>();
-        try {
-            service.findId(id);
-            service.delete(id);
-            output.put("status", "Delete Data Berhasil");
-            return ResponseEntity.ok(output);
-        } catch (EmptyResultDataAccessException e) {
-            output.put("status", "Id Tidak Ditemukan");
-            return ResponseEntity.badRequest().body(output);
         }
     }
 }

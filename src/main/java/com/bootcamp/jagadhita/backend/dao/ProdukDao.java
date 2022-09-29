@@ -24,7 +24,7 @@ public class ProdukDao {
     NamedParameterJdbcTemplate jdbcTemplate;
 
     public Produk findId(Integer id) {
-        String query = "SELECT produk.id, produk.nama, produk.jenis, produk.berat,\n" +
+        String query = "SELECT produk.id, produk.nama, produk.jenis, produk.berat, produk.harga,\n" +
                 "produsen.id as produsen_id,\n" +
                 "produsen.nama as produsen_nama,\n" +
                 "produsen.kode as produsen_kode,\n" +
@@ -43,6 +43,7 @@ public class ProdukDao {
                 produk.setNama(rs.getString("nama"));
                 produk.setJenis(rs.getString("jenis"));
                 produk.setBerat(rs.getString("berat"));
+                produk.setHarga(rs.getDouble("harga"));
                 Produsen produsen = new Produsen();
                 produsen.setId(rs.getInt("produsen_id"));
                 produsen.setNama(rs.getString("produsen_nama"));
@@ -56,7 +57,7 @@ public class ProdukDao {
     }
 
     public List<Produk> findAll() {
-        String query = "SELECT produk.id, produk.nama, produk.jenis, produk.berat,\n" +
+        String query = "SELECT produk.id, produk.nama, produk.jenis, produk.berat, produk.harga,\n" +
                 "produsen.id as produsen_id,\n" +
                 "produsen.nama as produsen_nama,\n" +
                 "produsen.kode as produsen_kode,\n" +
@@ -71,6 +72,7 @@ public class ProdukDao {
                 produk.setNama(rs.getString("nama"));
                 produk.setJenis(rs.getString("jenis"));
                 produk.setBerat(rs.getString("berat"));
+                produk.setHarga(rs.getDouble("harga"));
                 Produsen produsen = new Produsen();
                 produsen.setId(rs.getInt("produsen_id"));
                 produsen.setNama(rs.getString("produsen_nama"));
@@ -85,12 +87,13 @@ public class ProdukDao {
 
     public Integer create(ProdukDto.Create produk) {
         String query = "INSERT INTO public.produk\n" +
-                "(nama, jenis, berat, produsen_id)\n" +
-                "VALUES(:nama, :jenis, :berat, :produsen_id)";
+                "(nama, jenis, berat, produsen_id, harga)\n" +
+                "VALUES(:nama, :jenis, :berat, :produsen_id, :harga);\n";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("nama", produk.getNama());
         map.addValue("jenis", produk.getJenis());
         map.addValue("berat", produk.getBerat());
+        map.addValue("harga", produk.getHarga());
         map.addValue("produsen_id", produk.getProdusen_id());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -100,14 +103,15 @@ public class ProdukDao {
 
     public void update(ProdukDto.Update produk) {
         String query = "UPDATE public.produk\n" +
-                "SET nama=:nama, jenis=:jenis, berat=:berat\n," +
-                "produsen_id=:produsen_id\n" +
+                "SET nama=:nama, jenis=:jenis, berat=:berat," +
+                "produsen_id=:produsen_id, harga=:harga\n" +
                 "WHERE id=:id";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("id", produk.getId());
         map.addValue("nama", produk.getNama());
         map.addValue("jenis", produk.getJenis());
         map.addValue("berat", produk.getBerat());
+        map.addValue("harga", produk.getHarga());
         map.addValue("produsen_id", produk.getProdusen_id());
         jdbcTemplate.update(query, map);
     }
